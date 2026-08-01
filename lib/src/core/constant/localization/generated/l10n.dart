@@ -252,6 +252,31 @@ class GeneratedLocalizations {
     return Intl.message('Played', name: 'played', desc: '', args: []);
   }
 
+  /// `Could not save progress. Your board is still available.`
+  String get progressSaveFailed {
+    return Intl.message(
+      'Could not save progress. Your board is still available.',
+      name: 'progressSaveFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Result unavailable`
+  String get resultUnavailable {
+    return Intl.message(
+      'Result unavailable',
+      name: 'resultUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get retry {
+    return Intl.message('Retry', name: 'retry', desc: '', args: []);
+  }
+
   /// `Russian`
   String get ru {
     return Intl.message('Russian', name: 'ru', desc: '', args: []);

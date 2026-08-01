@@ -66,6 +66,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "other": MessageLookupByLibrary.simpleMessage("Other"),
     "played": MessageLookupByLibrary.simpleMessage("Played"),
+    "progressSaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Could not save progress. Your board is still available.",
+    ),
+    "resultUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Result unavailable",
+    ),
+    "retry": MessageLookupByLibrary.simpleMessage("Retry"),
     "ru": MessageLookupByLibrary.simpleMessage("Russian"),
     "secretWord": MessageLookupByLibrary.simpleMessage("Secret word"),
     "sendMessage": MessageLookupByLibrary.simpleMessage(

@@ -66,6 +66,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "other": MessageLookupByLibrary.simpleMessage("Другой"),
     "played": MessageLookupByLibrary.simpleMessage("Сыграно"),
+    "progressSaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось сохранить прогресс. Текущая доска не потеряна.",
+    ),
+    "resultUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Результат недоступен",
+    ),
+    "retry": MessageLookupByLibrary.simpleMessage("Повторить"),
     "ru": MessageLookupByLibrary.simpleMessage("Русский"),
     "secretWord": MessageLookupByLibrary.simpleMessage("Загаданное слово"),
     "sendMessage": MessageLookupByLibrary.simpleMessage(
