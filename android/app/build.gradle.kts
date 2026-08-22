@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-  namespace = "com.carapacik.wordly"
+  namespace = "com.wordianguess.app"
   compileSdk = 37
   ndkVersion = "29.0.14206865"
 
@@ -21,7 +21,7 @@ android {
   }
 
   defaultConfig {
-    applicationId = "com.carapacik.wordly"
+    applicationId = "com.wordianguess.app"
     minSdk = 24
     targetSdk = 37
     versionCode = flutter.versionCode
