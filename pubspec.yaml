@@ -35,6 +35,7 @@ dependencies:
   url_launcher: ^6.3.2
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.4
   build_runner: ^2.15.1
   carapacik_lints: ^3.12.0
   drift_dev: ^2.34.0
