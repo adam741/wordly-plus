@@ -22,7 +22,7 @@ android {
 
   defaultConfig {
     applicationId = "com.carapacik.wordly"
-    minSdk = 28
+    minSdk = 24
     targetSdk = 37
     versionCode = flutter.versionCode
     versionName = flutter.versionName
