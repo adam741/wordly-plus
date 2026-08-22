@@ -4,7 +4,7 @@ workflows:
       flutter: 3.44.8
       java: 21
       android_signing:
-        - Adel
+        - Aser
     scripts:
       - name: Set up key.properties from Codemagic keystore
         script: |
