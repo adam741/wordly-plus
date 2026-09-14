@@ -2,7 +2,7 @@
 [![dart style](https://img.shields.io/badge/style-carapacik__lints%20-brightgreen?logo=dart)](https://pub.dev/packages/carapacik_lints)
 [![Analyze](https://github.com/Carapacik/WordlyPlus/actions/workflows/analyze.yml/badge.svg?branch=main)](https://github.com/Carapacik/WordlyPlus/actions/workflows/analyze.yml)
 [![Star on Github](https://img.shields.io/github/stars/Carapacik/WordlyPlus?logo=github)](https://github.com/Carapacik/WordlyPlus)
-<p align="center"><img src="[.](https://github.com/Carapacik/wordly-plus/blob/main/assets/images/splash.png" alt="Wordly Plus Logo" width="70%" /></p>
+<p align="center"><img src="https://raw.githubusercontent.com/Carapacik/wordly-plus/blob/main/assets/images/splash.png" alt="Wordly Plus Logo" width="70%" /></p>
 
 <a href='https://play.google.com/store/apps/details?id=com.carapacik.wordly'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height='90px'/></a>
 
