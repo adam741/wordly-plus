@@ -2,7 +2,7 @@ import 'dart:async' show runZonedGuarded;
 
 import 'package:bloc/bloc.dart' show Bloc;
 import 'package:flutter/foundation.dart' show kReleaseMode;
-import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome, SystemUiOverlayStyle;
+import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:flutter/widgets.dart' show FlutterError, WidgetsBinding, WidgetsFlutterBinding, runApp;
 import 'package:logger/logger.dart' as l show LogLevel, PrintingLogObserver, createAppLogger, logger;
 import 'package:wordly/src/feature/app/bloc/app_bloc_observer.dart';
@@ -22,9 +22,6 @@ Future<void> startup() async {
     // Ensure Flutter is initialized
     WidgetsFlutterBinding.ensureInitialized();
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(systemNavigationBarContrastEnforced: false),
-    );
 
     // Configure global error interception
     FlutterError.onError = l.logger.logFlutterError;
