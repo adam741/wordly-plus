@@ -1,4 +1,4 @@
-package com.wordianguess.app
+package com.app.wordsixquest
 
 import io.flutter.embedding.android.FlutterActivity
 
