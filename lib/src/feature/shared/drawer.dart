@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wordly/src/core/common/common.dart';
-import 'package:wordly/src/feature/about/widget/about_page.dart';
 import 'package:wordly/src/feature/game/bloc/game_bloc.dart';
 import 'package:wordly/src/feature/game/domain/model/game_mode.dart';
 import 'package:wordly/src/feature/game/widget/game_page.dart';
@@ -70,16 +69,6 @@ class CustomDrawer extends StatelessWidget {
               MaterialPageRoute<void>(
                 builder: (context) => BlocProvider.value(value: bloc, child: const SettingsPage()),
               ),
-            );
-          },
-        ),
-        ListTile(
-          title: Text(context.l10n.about, style: const TextStyle(fontWeight: FontWeight.w500)),
-          onTap: () async {
-            Scaffold.of(context).closeDrawer();
-            final NavigatorState navigator = Navigator.of(context);
-            await navigator.push(
-              MaterialPageRoute<void>(builder: (context) => const AboutPage(), fullscreenDialog: true),
             );
           },
         ),
