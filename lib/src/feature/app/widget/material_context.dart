@@ -8,12 +8,14 @@ import 'package:wordly/src/feature/game/widget/game_page.dart';
 import 'package:wordly/src/feature/settings/settings.dart';
 
 /// Entry point for the application that uses [MaterialApp].
-class const MaterialContext({super.key}) extends StatefulWidget {
+class MaterialContext extends StatefulWidget {
+  const MaterialContext({super.key});
+
   @override
   State<MaterialContext> createState() => _MaterialContextState();
 }
 
-class _MaterialContextState() extends State<MaterialContext> {
+class _MaterialContextState extends State<MaterialContext> {
   /// This global key is needed for Flutter to work properly
   /// when Widgets Inspector is enabled.
   static final GlobalKey<State<StatefulWidget>> _globalKey = GlobalKey(debugLabel: 'MaterialContext');
