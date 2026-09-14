@@ -1,4 +1,4 @@
-package com.app.wordsixquest
+package com.app.sixtriesword
 
 import io.flutter.embedding.android.FlutterActivity
 
