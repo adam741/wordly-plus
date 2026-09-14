@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-  namespace = "com.wordianguess.app"
+  namespace = "com.app.wordsixquest"
   compileSdk = 37
   ndkVersion = "29.0.14206865"
 
@@ -21,7 +21,7 @@ android {
   }
 
   defaultConfig {
-    applicationId = "com.wordianguess.app"
+    applicationId = "com.app.wordsixquest"
     minSdk = 24
     targetSdk = 37
     versionCode = flutter.versionCode
