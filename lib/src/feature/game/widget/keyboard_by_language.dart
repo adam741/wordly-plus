@@ -14,14 +14,11 @@ class KeyboardByLanguage extends StatelessWidget {
     return SettingsBuilder(
       builder: (context, settings) {
         final Locale dictionary = settings.dictionary;
-        return SizedBox(
-          height: 200,
-          child: switch (dictionary.languageCode) {
-            'en' => KeyboardEn(generalSettings: settings.general, dictionary: dictionary),
-            'ru' => KeyboardRu(generalSettings: settings.general, dictionary: dictionary),
-            _ => const SizedBox.shrink(),
-          },
-        );
+        return switch (dictionary.languageCode) {
+          'en' => KeyboardEn(generalSettings: settings.general, dictionary: dictionary),
+          'ru' => KeyboardRu(generalSettings: settings.general, dictionary: dictionary),
+          _ => const SizedBox.shrink(),
+        };
       },
     );
   }
