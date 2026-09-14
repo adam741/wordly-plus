@@ -55,7 +55,6 @@ class _MaterialContextState extends State<MaterialContext> {
           localizationsDelegates: Localization.localizationDelegates,
           supportedLocales: Localization.supportedLocales,
           locale: locale,
-          onGenerateTitle: (context) => context.l10n.appTitle,
           debugShowCheckedModeBanner: false,
           home: const GamePage(),
           builder: (context, child) => KeyedSubtree(
