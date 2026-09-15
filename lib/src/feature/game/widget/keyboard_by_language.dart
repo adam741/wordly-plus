@@ -34,6 +34,7 @@ class KeyboardEn extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, LetterStatus> statuses = context.watch<GameBloc>().state.statuses;
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 8),
         Row(
@@ -50,7 +51,7 @@ class KeyboardEn extends StatelessWidget {
               ),
           ],
         ),
-        const Spacer(),
+        const SizedBox(height: 8),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -65,7 +66,7 @@ class KeyboardEn extends StatelessWidget {
               ),
           ],
         ),
-        const Spacer(),
+        const SizedBox(height: 8),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -98,6 +99,7 @@ class KeyboardRu extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, LetterStatus> statuses = context.watch<GameBloc>().state.statuses;
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 8),
         Row(
@@ -114,7 +116,7 @@ class KeyboardRu extends StatelessWidget {
               ),
           ],
         ),
-        const Spacer(),
+        const SizedBox(height: 8),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -129,7 +131,7 @@ class KeyboardRu extends StatelessWidget {
               ),
           ],
         ),
-        const Spacer(),
+        const SizedBox(height: 8),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
