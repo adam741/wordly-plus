@@ -21,14 +21,12 @@ import 'package:wordly/src/feature/statistic/statistic.dart';
 import 'package:wordly/src/feature/statistic/widget/statistic_page.dart';
 import 'package:wordly/src/feature/tutorial/widget/tutorial_page.dart';
 
-class GamePage extends StatefulWidget {
-  const GamePage({super.key});
-
+class const GamePage({super.key}) extends StatefulWidget {
   @override
   State<GamePage> createState() => _GamePageState();
 }
 
-class _GamePageState extends State<GamePage> {
+class _GamePageState() extends State<GamePage> {
   late final FocusNode _focusNode;
 
   @override
@@ -57,9 +55,7 @@ class _GamePageState extends State<GamePage> {
       final bool isFirstEnter = await gameRepository.isFirstEnter;
       if (isFirstEnter) {
         unawaited(gameRepository.setFirstEnter());
-        unawaited(
-          navigator.push(MaterialPageRoute<void>(builder: (context) => const TutorialPage(), fullscreenDialog: true)),
-        );
+        navigator.push(MaterialPageRoute<void>(builder: (context) => const TutorialPage(), fullscreenDialog: true));
         return;
       }
     });
@@ -128,11 +124,10 @@ class _GamePageState extends State<GamePage> {
   }
 }
 
-class GameBody extends StatelessWidget {
-  const GameBody({super.key});
-
+class const GameBody({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final bool useSpacer = MediaQuery.sizeOf(context).height > 800;
     return SettingsBuilder(
       builder: (context, settings) => BlocListener<GameBloc, GameState>(
         listenWhen: (previous, current) =>
@@ -209,8 +204,10 @@ class GameBody extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 12),
-              Flexible(flex: 1, child: Center(child: WordsGrid())),
-              Flexible(flex: 1, child: Center(child: KeyboardByLanguage())),
+              const Center(child: WordsGrid()),
+              if (useSpacer) const Spacer(),
+              const Center(child: KeyboardByLanguage()),
+              if (useSpacer) const Spacer(),
               const SizedBox(height: 12),
             ],
           ),
