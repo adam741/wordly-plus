@@ -209,8 +209,8 @@ class GameBody extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 12),
-              Flexible(flex: 3, child: Center(child: WordsGrid())),
-              Flexible(flex: 2, child: Center(child: KeyboardByLanguage())),
+              Flexible(flex: 1, child: Center(child: WordsGrid())),
+              Flexible(flex: 1, child: Center(child: KeyboardByLanguage())),
               const SizedBox(height: 12),
             ],
           ),
