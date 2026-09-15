@@ -48,7 +48,7 @@ class _GamePageState() extends State<GamePage> {
             state.gameMode,
             isWin: state.isWin,
             onTimerEnd: GameMode.daily == state.gameMode ? () => bloc.add(GameEvent.resetBoard(state.gameMode)) : null,
-            shareString: shareString(context, state.buildResultString),
+            shareString: await shareString(context, state.buildResultString),
             nextLevelPressed: () => bloc.add(const GameEvent.resetBoard(GameMode.lvl)),
           ),
         );
@@ -154,7 +154,7 @@ class const GameBody({super.key}) extends StatelessWidget {
                         bloc.add(GameEvent.resetBoard(state.gameMode));
                       }
                     : null,
-                shareString: shareString(context, state.buildResultString),
+                shareString: await shareString(context, state.buildResultString),
                 nextLevelPressed: () {
                   Navigator.of(context).pop();
                   bloc.add(const GameEvent.resetBoard(GameMode.lvl));
