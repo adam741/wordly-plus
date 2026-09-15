@@ -8,14 +8,16 @@ import 'package:wordly/src/feature/game/domain/model/letter_info.dart';
 import 'package:wordly/src/feature/settings/settings.dart';
 
 class WordsGrid extends StatelessWidget {
-  const WordsGrid({super.key});
+  const WordsGrid({required this.maxWidth, super.key});
+
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 350),
+        constraints: BoxConstraints(maxWidth: maxWidth),
         child: SettingsBuilder(
           builder: (context, settings) => BlocBuilder<GameBloc, GameState>(
             builder: (context, state) {
