@@ -22,12 +22,14 @@ import 'package:wordly/src/feature/statistic/statistic.dart';
 import 'package:wordly/src/feature/statistic/widget/statistic_page.dart';
 import 'package:wordly/src/feature/tutorial/widget/tutorial_page.dart';
 
-class const GamePage({super.key}) extends StatefulWidget {
+class GamePage extends StatefulWidget {
+  const GamePage({super.key});
+
   @override
   State<GamePage> createState() => _GamePageState();
 }
 
-class _GamePageState() extends State<GamePage> {
+class _GamePageState extends State<GamePage> {
   late final FocusNode _focusNode;
 
   @override
@@ -125,7 +127,9 @@ class _GamePageState() extends State<GamePage> {
   }
 }
 
-class const GameBody({super.key}) extends StatelessWidget {
+class GameBody extends StatelessWidget {
+  const GameBody({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SettingsBuilder(
@@ -137,7 +141,7 @@ class const GameBody({super.key}) extends StatelessWidget {
                 previous.dictionary == current.dictionary &&
                 current.isResult) ||
             current.isFailure,
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state.isResult) {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             final GameBloc bloc = context.read<GameBloc>();
