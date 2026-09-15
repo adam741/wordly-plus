@@ -1,4 +1,4 @@
-package com.app.sixtriesword
+package com.app.sixstepword
 
 import io.flutter.embedding.android.FlutterActivity
 
