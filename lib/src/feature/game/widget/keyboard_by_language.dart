@@ -6,7 +6,7 @@ import 'package:wordly/src/feature/game/domain/model/keyboard.dart';
 import 'package:wordly/src/feature/game/domain/model/letter_info.dart';
 import 'package:wordly/src/feature/settings/settings.dart';
 
-class const KeyboardByLanguage({super.key}) extends StatelessWidget {
+class const KeyboardByLanguage({required final double maxWidth, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SettingsBuilder(
@@ -15,8 +15,8 @@ class const KeyboardByLanguage({super.key}) extends StatelessWidget {
         return SizedBox(
           height: 200,
           child: switch (dictionary.languageCode) {
-            'en' => KeyboardEn(generalSettings: settings.general, dictionary: dictionary),
-            'ru' => KeyboardRu(generalSettings: settings.general, dictionary: dictionary),
+            'en' => KeyboardEn(generalSettings: settings.general, dictionary: dictionary, maxWidth: maxWidth),
+            'ru' => KeyboardRu(generalSettings: settings.general, dictionary: dictionary, maxWidth: maxWidth),
             _ => const SizedBox.shrink(),
           },
         );
@@ -25,8 +25,12 @@ class const KeyboardByLanguage({super.key}) extends StatelessWidget {
   }
 }
 
-class const KeyboardEn({required final GeneralSettings generalSettings, required final Locale dictionary, super.key})
-    extends StatelessWidget {
+class const KeyboardEn({
+  required final GeneralSettings generalSettings,
+  required final Locale dictionary,
+  required final double maxWidth,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, LetterStatus> statuses = context.watch<GameBloc>().state.statuses;
@@ -44,6 +48,7 @@ class const KeyboardEn({required final GeneralSettings generalSettings, required
                     : LetterStatus.unknown,
                 generalSettings: generalSettings,
                 dictionary: dictionary,
+                maxWidth: maxWidth,
               ),
           ],
         ),
@@ -59,6 +64,7 @@ class const KeyboardEn({required final GeneralSettings generalSettings, required
                     : LetterStatus.unknown,
                 generalSettings: generalSettings,
                 dictionary: dictionary,
+                maxWidth: maxWidth,
               ),
           ],
         ),
@@ -66,7 +72,7 @@ class const KeyboardEn({required final GeneralSettings generalSettings, required
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            EnterKey(generalSettings: generalSettings, dictionary: dictionary),
+            EnterKey(generalSettings: generalSettings, dictionary: dictionary, maxWidth: maxWidth),
             for (var i = 0; i < KeyboardList.enKeyboard.$3.length; i++)
               KeyboardKey(
                 letter: KeyboardList.enKeyboard.$3[i],
@@ -75,8 +81,9 @@ class const KeyboardEn({required final GeneralSettings generalSettings, required
                     : LetterStatus.unknown,
                 generalSettings: generalSettings,
                 dictionary: dictionary,
+                maxWidth: maxWidth,
               ),
-            DeleteKey(generalSettings: generalSettings, dictionary: dictionary),
+            DeleteKey(generalSettings: generalSettings, dictionary: dictionary, maxWidth: maxWidth),
           ],
         ),
         const SizedBox(height: 8),
@@ -85,8 +92,12 @@ class const KeyboardEn({required final GeneralSettings generalSettings, required
   }
 }
 
-class const KeyboardRu({required final GeneralSettings generalSettings, required final Locale dictionary, super.key})
-    extends StatelessWidget {
+class const KeyboardRu({
+  required final GeneralSettings generalSettings,
+  required final Locale dictionary,
+  required final double maxWidth,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, LetterStatus> statuses = context.watch<GameBloc>().state.statuses;
@@ -104,6 +115,7 @@ class const KeyboardRu({required final GeneralSettings generalSettings, required
                     : LetterStatus.unknown,
                 generalSettings: generalSettings,
                 dictionary: dictionary,
+                maxWidth: maxWidth,
               ),
           ],
         ),
@@ -119,6 +131,7 @@ class const KeyboardRu({required final GeneralSettings generalSettings, required
                     : LetterStatus.unknown,
                 generalSettings: generalSettings,
                 dictionary: dictionary,
+                maxWidth: maxWidth,
               ),
           ],
         ),
@@ -126,7 +139,7 @@ class const KeyboardRu({required final GeneralSettings generalSettings, required
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            EnterKey(generalSettings: generalSettings, dictionary: dictionary),
+            EnterKey(generalSettings: generalSettings, dictionary: dictionary, maxWidth: maxWidth),
             for (var i = 0; i < KeyboardList.ruKeyboard.$3.length; i++)
               KeyboardKey(
                 letter: KeyboardList.ruKeyboard.$3[i],
@@ -135,8 +148,9 @@ class const KeyboardRu({required final GeneralSettings generalSettings, required
                     : LetterStatus.unknown,
                 generalSettings: generalSettings,
                 dictionary: dictionary,
+                maxWidth: maxWidth,
               ),
-            DeleteKey(generalSettings: generalSettings, dictionary: dictionary),
+            DeleteKey(generalSettings: generalSettings, dictionary: dictionary, maxWidth: maxWidth),
           ],
         ),
         const SizedBox(height: 8),
@@ -145,15 +159,19 @@ class const KeyboardRu({required final GeneralSettings generalSettings, required
   }
 }
 
-class const EnterKey({required final GeneralSettings generalSettings, required final Locale dictionary, super.key})
-    extends StatelessWidget {
+class const EnterKey({
+  required final GeneralSettings generalSettings,
+  required final Locale dictionary,
+  required final double maxWidth,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 3),
       child: SizedBox(
         height: 58,
-        width: dictionary.width(context) * 1.65,
+        width: dictionary.width(maxWidth) * 1.65,
         child: Material(
           color: LetterStatus.unknown.cellColor(context, generalSettings),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
@@ -172,15 +190,19 @@ class const EnterKey({required final GeneralSettings generalSettings, required f
   }
 }
 
-class const DeleteKey({required final GeneralSettings generalSettings, required final Locale dictionary, super.key})
-    extends StatelessWidget {
+class const DeleteKey({
+  required final GeneralSettings generalSettings,
+  required final Locale dictionary,
+  required final double maxWidth,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 3),
       child: SizedBox(
         height: 58,
-        width: dictionary.width(context) * 1.65,
+        width: dictionary.width(maxWidth) * 1.65,
         child: Material(
           color: LetterStatus.unknown.cellColor(context, generalSettings),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
@@ -205,6 +227,7 @@ class const KeyboardKey({
   required final LetterStatus status,
   required final GeneralSettings generalSettings,
   required final Locale dictionary,
+  required final double maxWidth,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -213,7 +236,7 @@ class const KeyboardKey({
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: SizedBox(
         height: 58,
-        width: dictionary.width(context),
+        width: dictionary.width(maxWidth),
         child: Material(
           color: status.cellColor(context, generalSettings),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
