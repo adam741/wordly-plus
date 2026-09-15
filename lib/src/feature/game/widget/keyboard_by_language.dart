@@ -6,35 +6,31 @@ import 'package:wordly/src/feature/game/domain/model/keyboard.dart';
 import 'package:wordly/src/feature/game/domain/model/letter_info.dart';
 import 'package:wordly/src/feature/settings/settings.dart';
 
-class KeyboardByLanguage extends StatelessWidget {
-  const KeyboardByLanguage({super.key});
-
+class const KeyboardByLanguage({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SettingsBuilder(
       builder: (context, settings) {
         final Locale dictionary = settings.dictionary;
-        return switch (dictionary.languageCode) {
-          'en' => KeyboardEn(generalSettings: settings.general, dictionary: dictionary),
-          'ru' => KeyboardRu(generalSettings: settings.general, dictionary: dictionary),
-          _ => const SizedBox.shrink(),
-        };
+        return SizedBox(
+          height: 200,
+          child: switch (dictionary.languageCode) {
+            'en' => KeyboardEn(generalSettings: settings.general, dictionary: dictionary),
+            'ru' => KeyboardRu(generalSettings: settings.general, dictionary: dictionary),
+            _ => const SizedBox.shrink(),
+          },
+        );
       },
     );
   }
 }
 
-class KeyboardEn extends StatelessWidget {
-  const KeyboardEn({required this.generalSettings, required this.dictionary, super.key});
-
-  final GeneralSettings generalSettings;
-  final Locale dictionary;
-
+class const KeyboardEn({required final GeneralSettings generalSettings, required final Locale dictionary, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, LetterStatus> statuses = context.watch<GameBloc>().state.statuses;
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 8),
         Row(
@@ -51,7 +47,7 @@ class KeyboardEn extends StatelessWidget {
               ),
           ],
         ),
-        const SizedBox(height: 8),
+        const Spacer(),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -66,7 +62,7 @@ class KeyboardEn extends StatelessWidget {
               ),
           ],
         ),
-        const SizedBox(height: 8),
+        const Spacer(),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -89,17 +85,12 @@ class KeyboardEn extends StatelessWidget {
   }
 }
 
-class KeyboardRu extends StatelessWidget {
-  const KeyboardRu({required this.generalSettings, required this.dictionary, super.key});
-
-  final GeneralSettings generalSettings;
-  final Locale dictionary;
-
+class const KeyboardRu({required final GeneralSettings generalSettings, required final Locale dictionary, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, LetterStatus> statuses = context.watch<GameBloc>().state.statuses;
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 8),
         Row(
@@ -116,7 +107,7 @@ class KeyboardRu extends StatelessWidget {
               ),
           ],
         ),
-        const SizedBox(height: 8),
+        const Spacer(),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -131,7 +122,7 @@ class KeyboardRu extends StatelessWidget {
               ),
           ],
         ),
-        const SizedBox(height: 8),
+        const Spacer(),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -154,12 +145,8 @@ class KeyboardRu extends StatelessWidget {
   }
 }
 
-class EnterKey extends StatelessWidget {
-  const EnterKey({required this.generalSettings, required this.dictionary, super.key});
-
-  final GeneralSettings generalSettings;
-  final Locale dictionary;
-
+class const EnterKey({required final GeneralSettings generalSettings, required final Locale dictionary, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -185,12 +172,8 @@ class EnterKey extends StatelessWidget {
   }
 }
 
-class DeleteKey extends StatelessWidget {
-  const DeleteKey({required this.generalSettings, required this.dictionary, super.key});
-
-  final GeneralSettings generalSettings;
-  final Locale dictionary;
-
+class const DeleteKey({required final GeneralSettings generalSettings, required final Locale dictionary, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -217,20 +200,13 @@ class DeleteKey extends StatelessWidget {
   }
 }
 
-class KeyboardKey extends StatelessWidget {
-  const KeyboardKey({
-    required this.letter,
-    required this.status,
-    required this.generalSettings,
-    required this.dictionary,
-    super.key,
-  });
-
-  final String letter;
-  final LetterStatus status;
-  final GeneralSettings generalSettings;
-  final Locale dictionary;
-
+class const KeyboardKey({
+  required final String letter,
+  required final LetterStatus status,
+  required final GeneralSettings generalSettings,
+  required final Locale dictionary,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
