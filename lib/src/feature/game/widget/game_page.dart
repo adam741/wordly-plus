@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' show min;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -127,7 +128,6 @@ class _GamePageState() extends State<GamePage> {
 class const GameBody({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bool useSpacer = MediaQuery.sizeOf(context).height > 800;
     return SettingsBuilder(
       builder: (context, settings) => BlocListener<GameBloc, GameState>(
         listenWhen: (previous, current) =>
@@ -201,15 +201,27 @@ class const GameBody({super.key}) extends StatelessWidget {
           }
         },
         child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 12),
-              const Center(child: WordsGrid()),
-              if (useSpacer) const Spacer(),
-              const Center(child: KeyboardByLanguage()),
-              if (useSpacer) const Spacer(),
-              const SizedBox(height: 12),
-            ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              const double topSpacing = 12;
+              const double midSpacing = 16;
+              const double keyboardHeight = 200;
+              double gridWidth = 350;
+              if (constraints.maxHeight.isFinite) {
+                final double availableForGrid = constraints.maxHeight - topSpacing - midSpacing - keyboardHeight;
+                final double cellSize = (availableForGrid - 56) / 6;
+                final double computedWidth = 5 * cellSize + 32;
+                gridWidth = min(computedWidth, 350);
+              }
+              return Column(
+                children: [
+                  const SizedBox(height: topSpacing),
+                  Flexible(child: Align(alignment: Alignment.topCenter, child: WordsGrid(maxWidth: gridWidth))),
+                  const SizedBox(height: midSpacing),
+                  Center(child: KeyboardByLanguage(maxWidth: gridWidth)),
+                ],
+              );
+            },
           ),
         ),
       ),
