@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-  namespace = "com.app.wordsixquest"
+  namespace = "com.app.sixtriesword"
   compileSdk = 37
   ndkVersion = "29.0.14206865"
 
@@ -21,7 +21,7 @@ android {
   }
 
   defaultConfig {
-    applicationId = "com.app.wordsixquest"
+    applicationId = "com.app.sixtriesword"
     minSdk = 24
     targetSdk = 37
     versionCode = flutter.versionCode
