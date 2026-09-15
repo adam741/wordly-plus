@@ -1,4 +1,5 @@
 import 'package:wordly/src/feature/app/model/environment.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// Application configuration
 class ApplicationConfig {
@@ -30,5 +31,8 @@ class ApplicationConfig {
 
   String get webLink => 'https://carapacik.github.io/wordly_plus/';
 
-  String get androidLink => 'https://play.google.com/store/apps/details?id=com.carapacik.wordly';
+  Future<String> get androidLink async {
+    final info = await PackageInfo.fromPlatform();
+    return 'https://play.google.com/store/apps/details?id=${info.packageName}';
+  }
 }
