@@ -206,18 +206,13 @@ class GameBody extends StatelessWidget {
           }
         },
         child: SafeArea(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 12),
-                const WordsGrid(),
-                const SizedBox(height: 24),
-                const KeyboardByLanguage(),
-                const SizedBox(height: 12),
-              ],
-            ),
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              Flexible(child: Center(child: WordsGrid())),
+              Flexible(child: Center(child: KeyboardByLanguage())),
+              const SizedBox(height: 12),
+            ],
           ),
         ),
       ),
