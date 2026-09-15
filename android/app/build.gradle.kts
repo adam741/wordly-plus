@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-  namespace = "com.app.sixtriesword"
+  namespace = "com.app.sixstepword"
   compileSdk = 37
   ndkVersion = "29.0.14206865"
 
@@ -21,7 +21,7 @@ android {
   }
 
   defaultConfig {
-    applicationId = "com.app.sixtriesword"
+    applicationId = "com.app.sixstepword"
     minSdk = 24
     targetSdk = 37
     versionCode = flutter.versionCode
