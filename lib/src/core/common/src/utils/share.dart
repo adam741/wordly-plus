@@ -6,7 +6,7 @@ import 'package:wordly/src/core/common/common.dart';
 import 'package:wordly/src/feature/app/model/application_config.dart';
 import 'package:wordly/src/feature/game/domain/model/letter_info.dart';
 
-String? shareString(BuildContext context, (bool, int, List<LetterInfo>)? result) {
+Future<String?> shareString(BuildContext context, (bool, int, List<LetterInfo>)? result) async {
   if (result == null) {
     return null;
   }
@@ -22,7 +22,7 @@ String? shareString(BuildContext context, (bool, int, List<LetterInfo>)? result)
       kIsWeb
           ? const ApplicationConfig().webLink
           : Platform.isAndroid
-          ? const ApplicationConfig().androidLink
+          ? await const ApplicationConfig().androidLink
           : const ApplicationConfig().webLink,
     );
   return sb.toString();
