@@ -1,3 +1,5 @@
+import 'dart:math' show min;
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,14 +19,15 @@ class KeyboardList {
 }
 
 extension LocaleKeyboardX on Locale {
-  double width(double gridWidth) {
+  double width(BuildContext context) {
+    final double screenWidth = MediaQuery.sizeOf(context).width;
     switch (languageCode) {
       case 'en':
         final int maxKeyboardLength = KeyboardList.enKeyboard.$1.length;
-        return (gridWidth - (maxKeyboardLength + 1) * 6) / maxKeyboardLength;
+        return (min(screenWidth, 520) - (maxKeyboardLength + 1) * 6) / maxKeyboardLength;
       case 'ru':
         final int maxKeyboardLength = KeyboardList.ruKeyboard.$1.length;
-        return (gridWidth - (maxKeyboardLength + 1) * 6) / maxKeyboardLength;
+        return (min(screenWidth, 520) - (maxKeyboardLength + 1) * 6) / maxKeyboardLength;
     }
     return 0;
   }
