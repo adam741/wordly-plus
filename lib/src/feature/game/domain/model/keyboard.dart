@@ -1,8 +1,10 @@
+import 'dart:math' show min;
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class KeyboardList {
+class KeyboardList() {
   static const (List<String>, List<String>, List<String>) enKeyboard = (
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
@@ -18,20 +20,20 @@ class KeyboardList {
 
 extension LocaleKeyboardX on Locale {
   double width(BuildContext context) {
-    const double gridWidth = 350;
+    final double screenWidth = MediaQuery.sizeOf(context).width;
     switch (languageCode) {
       case 'en':
         final int maxKeyboardLength = KeyboardList.enKeyboard.$1.length;
-        return (gridWidth - (maxKeyboardLength + 1) * 6) / maxKeyboardLength;
+        return (min(screenWidth, 520) - (maxKeyboardLength + 1) * 6) / maxKeyboardLength;
       case 'ru':
         final int maxKeyboardLength = KeyboardList.ruKeyboard.$1.length;
-        return (gridWidth - (maxKeyboardLength + 1) * 6) / maxKeyboardLength;
+        return (min(screenWidth, 520) - (maxKeyboardLength + 1) * 6) / maxKeyboardLength;
     }
     return 0;
   }
 }
 
-enum GameKeyboardKey {
+enum GameKeyboardKey(final LogicalKeyboardKey key, {required final String? enName, required final String? ruName}) {
   q(LogicalKeyboardKey.keyQ, enName: 'Q', ruName: 'Й'),
   w(LogicalKeyboardKey.keyW, enName: 'W', ruName: 'Ц'),
   e(LogicalKeyboardKey.keyE, enName: 'E', ruName: 'У'),
@@ -64,12 +66,6 @@ enum GameKeyboardKey {
   m(LogicalKeyboardKey.keyM, enName: 'M', ruName: 'Ь'),
   cm(LogicalKeyboardKey.comma, enName: null, ruName: 'Б'),
   pr(LogicalKeyboardKey.period, enName: null, ruName: 'Ю');
-
-  const GameKeyboardKey(this.key, {required this.enName, required this.ruName});
-
-  final LogicalKeyboardKey key;
-  final String? enName;
-  final String? ruName;
 
   static String? toLetter(LogicalKeyboardKey logicalKey, Locale dictionary) {
     final GameKeyboardKey? gameKey = GameKeyboardKey.values.firstWhereOrNull((e) => e.key == logicalKey);
