@@ -101,7 +101,7 @@ class _GridTileState extends State<GridTile> with SingleTickerProviderStateMixin
       key: ValueKey<LetterStatus>(widget.info.status),
       aspectRatio: 1,
       child: Container(
-        constraints: const BoxConstraints(maxHeight: 60, maxWidth: 60),
+        constraints: const BoxConstraints(maxHeight: 90, maxWidth: 90),
         decoration: BoxDecoration(
           color: widget.info.status.cellColor(context, widget.generalSettings),
           borderRadius: BorderRadius.circular(12),
