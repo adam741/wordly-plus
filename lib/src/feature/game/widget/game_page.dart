@@ -137,7 +137,7 @@ class const GameBody({super.key}) extends StatelessWidget {
                 previous.dictionary == current.dictionary &&
                 current.isResult) ||
             current.isFailure,
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state.isResult) {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             final GameBloc bloc = context.read<GameBloc>();
