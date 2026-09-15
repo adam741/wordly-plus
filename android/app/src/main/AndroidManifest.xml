@@ -15,7 +15,7 @@
   <application
     android:name="${applicationName}"
     android:icon="@mipmap/ic_launcher"
-    android:label="Six Step Word">
+    android:label="Six Round Word">
     <activity
       android:name=".MainActivity"
       android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
