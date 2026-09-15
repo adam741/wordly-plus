@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class KeyboardList() {
+class KeyboardList {
   static const (List<String>, List<String>, List<String>) enKeyboard = (
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
@@ -30,7 +30,7 @@ extension LocaleKeyboardX on Locale {
   }
 }
 
-enum GameKeyboardKey(final LogicalKeyboardKey key, {required final String? enName, required final String? ruName}) {
+enum GameKeyboardKey {
   q(LogicalKeyboardKey.keyQ, enName: 'Q', ruName: 'Й'),
   w(LogicalKeyboardKey.keyW, enName: 'W', ruName: 'Ц'),
   e(LogicalKeyboardKey.keyE, enName: 'E', ruName: 'У'),
@@ -63,6 +63,12 @@ enum GameKeyboardKey(final LogicalKeyboardKey key, {required final String? enNam
   m(LogicalKeyboardKey.keyM, enName: 'M', ruName: 'Ь'),
   cm(LogicalKeyboardKey.comma, enName: null, ruName: 'Б'),
   pr(LogicalKeyboardKey.period, enName: null, ruName: 'Ю');
+
+  const GameKeyboardKey(this.key, {required this.enName, required this.ruName});
+
+  final LogicalKeyboardKey key;
+  final String? enName;
+  final String? ruName;
 
   static String? toLetter(LogicalKeyboardKey logicalKey, Locale dictionary) {
     final GameKeyboardKey? gameKey = GameKeyboardKey.values.firstWhereOrNull((e) => e.key == logicalKey);
