@@ -1,231 +1,297 @@
-import 'dart:async';
-import 'dart:math' show min;
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wordly/src/core/common/common.dart';
-import 'package:wordly/src/core/common/src/utils/share.dart';
+import 'package:wordly/src/core/constant/generated/fonts.gen.dart';
 import 'package:wordly/src/feature/game/bloc/game_bloc.dart';
-import 'package:wordly/src/feature/game/domain/model/game_mode.dart';
+import 'package:wordly/src/feature/game/domain/model/keyboard.dart';
 import 'package:wordly/src/feature/game/domain/model/letter_info.dart';
-import 'package:wordly/src/feature/game/domain/model/word_error.dart';
-import 'package:wordly/src/feature/game/domain/repositories/game_repository.dart';
-import 'package:wordly/src/feature/game/widget/game_result_dialog.dart';
-import 'package:wordly/src/feature/game/widget/keyboard_by_language.dart';
-import 'package:wordly/src/feature/game/widget/words_grid.dart';
-import 'package:wordly/src/feature/level/level.dart';
-import 'package:wordly/src/feature/level/widget/level_page.dart';
 import 'package:wordly/src/feature/settings/settings.dart';
-import 'package:wordly/src/feature/shared/drawer.dart';
-import 'package:wordly/src/feature/statistic/statistic.dart';
-import 'package:wordly/src/feature/statistic/widget/statistic_page.dart';
-import 'package:wordly/src/feature/tutorial/widget/tutorial_page.dart';
 
-class GamePage extends StatefulWidget {
-  const GamePage({super.key});
+class KeyboardByLanguage extends StatelessWidget {
+  const KeyboardByLanguage({required this.maxWidth, super.key});
 
-  @override
-  State<GamePage> createState() => _GamePageState();
-}
-
-class _GamePageState extends State<GamePage> {
-  late final FocusNode _focusNode;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode = FocusNode();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final NavigatorState navigator = Navigator.of(context);
-      final IGameRepository gameRepository = context.dependencies.gameRepository;
-      final GameBloc bloc = context.read<GameBloc>();
-      final GameState state = bloc.state;
-      if (state.isResult) {
-        unawaited(
-          showGameResultDialog(
-            context,
-            state.secretWord,
-            context.dependencies.gameRepository.currentDictionary(state.dictionary)[state.secretWord] ?? '',
-            state.gameMode,
-            isWin: state.isWin,
-            onTimerEnd: GameMode.daily == state.gameMode ? () => bloc.add(GameEvent.resetBoard(state.gameMode)) : null,
-            shareString: await shareString(context, state.buildResultString),
-            nextLevelPressed: () => bloc.add(const GameEvent.resetBoard(GameMode.lvl)),
-          ),
-        );
-      }
-      final bool isFirstEnter = await gameRepository.isFirstEnter;
-      if (isFirstEnter) {
-        unawaited(gameRepository.setFirstEnter());
-        navigator.push(MaterialPageRoute<void>(builder: (context) => const TutorialPage(), fullscreenDialog: true));
-        return;
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
-    final SettingsContainer settingsScope = SettingsScope.of(context, listen: true);
-    final Settings settings = settingsScope.settingsService.current;
-    return KeyboardListener(
-      focusNode: _focusNode,
-      autofocus: true,
-      onKeyEvent: (event) {
-        if (event is KeyDownEvent) {
-          context.read<GameBloc>().add(GameEvent.listenKeyEvent(event));
-        }
+    return SettingsBuilder(
+      builder: (context, settings) {
+        final Locale dictionary = settings.dictionary;
+        return SizedBox(
+          height: 200,
+          child: switch (dictionary.languageCode) {
+            'en' => KeyboardEn(generalSettings: settings.general, dictionary: dictionary, maxWidth: maxWidth),
+            'ru' => KeyboardRu(generalSettings: settings.general, dictionary: dictionary, maxWidth: maxWidth),
+            _ => const SizedBox.shrink(),
+          },
+        );
       },
-      child: Scaffold(
-        backgroundColor: context.theme.extension<BackgroundCustomColors>()?.background,
-        appBar: AppBar(
-          centerTitle: true,
-          title: BlocBuilder<GameBloc, GameState>(
-            builder: (context, state) => Text(
-              state.gameMode == GameMode.daily ? context.l10n.daily : context.l10n.levelNumber(state.lvlNumber ?? 1),
-              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 32),
-            ),
-          ),
-          actions: [
-            BlocBuilder<GameBloc, GameState>(
-              builder: (context, state) {
-                if (state.gameMode == GameMode.daily) {
-                  return IconButton(
-                    tooltip: context.l10n.viewStatistic,
-                    icon: const Icon(Icons.leaderboard_outlined),
-                    onPressed: () async {
-                      await Navigator.of(context).push(
-                        MaterialPageRoute<void>(builder: (context) => StatisticPage(dictionary: settings.dictionary)),
-                      );
-                    },
-                  );
-                } else {
-                  return IconButton(
-                    tooltip: context.l10n.viewLevels,
-                    icon: const Icon(Icons.apps),
-                    onPressed: () async {
-                      await Navigator.of(
-                        context,
-                      ).push(MaterialPageRoute<void>(builder: (context) => LevelPage(dictionary: settings.dictionary)));
-                    },
-                  );
-                }
-              },
-            ),
+    );
+  }
+}
+
+class KeyboardEn extends StatelessWidget {
+  const KeyboardEn({
+    required this.generalSettings,
+    required this.dictionary,
+    required this.maxWidth,
+    super.key,
+  });
+
+  final GeneralSettings generalSettings;
+  final Locale dictionary;
+  final double maxWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    final Map<String, LetterStatus> statuses = context.watch<GameBloc>().state.statuses;
+    return Column(
+      children: [
+        const SizedBox(height: 8),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = 0; i < KeyboardList.enKeyboard.$1.length; i++)
+              KeyboardKey(
+                letter: KeyboardList.enKeyboard.$1[i],
+                status: statuses.containsKey(KeyboardList.enKeyboard.$1[i])
+                    ? statuses[KeyboardList.enKeyboard.$1[i]]!
+                    : LetterStatus.unknown,
+                generalSettings: generalSettings,
+                dictionary: dictionary,
+                maxWidth: maxWidth,
+              ),
           ],
         ),
-        drawer: const CustomDrawer(),
-        body: const GameBody(),
+        const Spacer(),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = 0; i < KeyboardList.enKeyboard.$2.length; i++)
+              KeyboardKey(
+                letter: KeyboardList.enKeyboard.$2[i],
+                status: statuses.containsKey(KeyboardList.enKeyboard.$2[i])
+                    ? statuses[KeyboardList.enKeyboard.$2[i]]!
+                    : LetterStatus.unknown,
+                generalSettings: generalSettings,
+                dictionary: dictionary,
+                maxWidth: maxWidth,
+              ),
+          ],
+        ),
+        const Spacer(),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            EnterKey(generalSettings: generalSettings, dictionary: dictionary, maxWidth: maxWidth),
+            for (var i = 0; i < KeyboardList.enKeyboard.$3.length; i++)
+              KeyboardKey(
+                letter: KeyboardList.enKeyboard.$3[i],
+                status: statuses.containsKey(KeyboardList.enKeyboard.$3[i])
+                    ? statuses[KeyboardList.enKeyboard.$3[i]]!
+                    : LetterStatus.unknown,
+                generalSettings: generalSettings,
+                dictionary: dictionary,
+                maxWidth: maxWidth,
+              ),
+            DeleteKey(generalSettings: generalSettings, dictionary: dictionary, maxWidth: maxWidth),
+          ],
+        ),
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+}
+
+class KeyboardRu extends StatelessWidget {
+  const KeyboardRu({
+    required this.generalSettings,
+    required this.dictionary,
+    required this.maxWidth,
+    super.key,
+  });
+
+  final GeneralSettings generalSettings;
+  final Locale dictionary;
+  final double maxWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    final Map<String, LetterStatus> statuses = context.watch<GameBloc>().state.statuses;
+    return Column(
+      children: [
+        const SizedBox(height: 8),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = 0; i < KeyboardList.ruKeyboard.$1.length; i++)
+              KeyboardKey(
+                letter: KeyboardList.ruKeyboard.$1[i],
+                status: statuses.containsKey(KeyboardList.ruKeyboard.$1[i])
+                    ? statuses[KeyboardList.ruKeyboard.$1[i]]!
+                    : LetterStatus.unknown,
+                generalSettings: generalSettings,
+                dictionary: dictionary,
+                maxWidth: maxWidth,
+              ),
+          ],
+        ),
+        const Spacer(),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = 0; i < KeyboardList.ruKeyboard.$2.length; i++)
+              KeyboardKey(
+                letter: KeyboardList.ruKeyboard.$2[i],
+                status: statuses.containsKey(KeyboardList.ruKeyboard.$2[i])
+                    ? statuses[KeyboardList.ruKeyboard.$2[i]]!
+                    : LetterStatus.unknown,
+                generalSettings: generalSettings,
+                dictionary: dictionary,
+                maxWidth: maxWidth,
+              ),
+          ],
+        ),
+        const Spacer(),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            EnterKey(generalSettings: generalSettings, dictionary: dictionary, maxWidth: maxWidth),
+            for (var i = 0; i < KeyboardList.ruKeyboard.$3.length; i++)
+              KeyboardKey(
+                letter: KeyboardList.ruKeyboard.$3[i],
+                status: statuses.containsKey(KeyboardList.ruKeyboard.$3[i])
+                    ? statuses[KeyboardList.ruKeyboard.$3[i]]!
+                    : LetterStatus.unknown,
+                generalSettings: generalSettings,
+                dictionary: dictionary,
+                maxWidth: maxWidth,
+              ),
+            DeleteKey(generalSettings: generalSettings, dictionary: dictionary, maxWidth: maxWidth),
+          ],
+        ),
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+}
+
+class EnterKey extends StatelessWidget {
+  const EnterKey({
+    required this.generalSettings,
+    required this.dictionary,
+    required this.maxWidth,
+    super.key,
+  });
+
+  final GeneralSettings generalSettings;
+  final Locale dictionary;
+  final double maxWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 3),
+      child: SizedBox(
+        height: 58,
+        width: dictionary.width(maxWidth) * 1.65,
+        child: Material(
+          color: LetterStatus.unknown.cellColor(context, generalSettings),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          child: InkWell(
+            onTap: () => context.read<GameBloc>().add(const GameEvent.enterPressed()),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+              child: FittedBox(
+                child: Icon(Icons.send, color: LetterStatus.unknown.textColor(context, generalSettings)),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
 }
 
-class GameBody extends StatelessWidget {
-  const GameBody({super.key});
+class DeleteKey extends StatelessWidget {
+  const DeleteKey({
+    required this.generalSettings,
+    required this.dictionary,
+    required this.maxWidth,
+    super.key,
+  });
+
+  final GeneralSettings generalSettings;
+  final Locale dictionary;
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
-    return SettingsBuilder(
-      builder: (context, settings) => BlocListener<GameBloc, GameState>(
-        listenWhen: (previous, current) =>
-            (!previous.gameCompleted &&
-                current.gameCompleted &&
-                previous.gameMode == current.gameMode &&
-                previous.dictionary == current.dictionary &&
-                current.isResult) ||
-            current.isFailure,
-        listener: (context, state) async {
-          if (state.isResult) {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            final GameBloc bloc = context.read<GameBloc>();
-            unawaited(
-              showGameResultDialog(
-                context,
-                state.secretWord,
-                context.dependencies.gameRepository.currentDictionary(state.dictionary)[state.secretWord] ?? '',
-                state.gameMode,
-                isWin: state.isWin,
-                onTimerEnd: GameMode.daily == state.gameMode
-                    ? () {
-                        Navigator.of(context).pop();
-                        bloc.add(GameEvent.resetBoard(state.gameMode));
-                      }
-                    : null,
-                shareString: await shareString(context, state.buildResultString),
-                nextLevelPressed: () {
-                  Navigator.of(context).pop();
-                  bloc.add(const GameEvent.resetBoard(GameMode.lvl));
-                },
+    return Padding(
+      padding: const EdgeInsets.only(left: 3),
+      child: SizedBox(
+        height: 58,
+        width: dictionary.width(maxWidth) * 1.65,
+        child: Material(
+          color: LetterStatus.unknown.cellColor(context, generalSettings),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          child: InkWell(
+            onTap: () => context.read<GameBloc>().add(const GameEvent.deletePressed()),
+            onLongPress: () => context.read<GameBloc>().add(const GameEvent.deleteLongPressed()),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+              child: FittedBox(
+                child: Icon(Icons.backspace_outlined, color: LetterStatus.unknown.textColor(context, generalSettings)),
               ),
-            );
-            return;
-          }
-          if (state.isFailure) {
-            if (state is GamePersistenceFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(context.l10n.progressSaveFailed),
-                  duration: const Duration(days: 1),
-                  behavior: SnackBarBehavior.floating,
-                  action: SnackBarAction(
-                    label: context.l10n.retry,
-                    onPressed: () => context.read<GameBloc>().add(const GameEvent.retryLevelPersistence()),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class KeyboardKey extends StatelessWidget {
+  const KeyboardKey({
+    required this.letter,
+    required this.status,
+    required this.generalSettings,
+    required this.dictionary,
+    required this.maxWidth,
+    super.key,
+  });
+
+  final String letter;
+  final LetterStatus status;
+  final GeneralSettings generalSettings;
+  final Locale dictionary;
+  final double maxWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3),
+      child: SizedBox(
+        height: 58,
+        width: dictionary.width(maxWidth),
+        child: Material(
+          color: status.cellColor(context, generalSettings),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+          child: InkWell(
+            onTap: () {
+              context.read<GameBloc>().add(GameEvent.letterPressed(letter));
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+              child: FittedBox(
+                child: Text(
+                  letter.toUpperCase(),
+                  style: TextStyle(
+                    color: status.textColor(context, generalSettings),
+                    fontFamily: FontFamily.robotoMono,
                   ),
                 ),
-              );
-              return;
-            }
-            WordError? error;
-            if (state case final GameFailure e) {
-              error = e.error;
-            }
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: LetterStatus.unknown.cellColor(context, settings.general),
-                content: Text(
-                  error?.localizedText(context) ?? '',
-                  style: TextStyle(color: LetterStatus.unknown.textColor(context, settings.general), fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-                duration: const Duration(seconds: 2),
-                behavior: SnackBarBehavior.floating,
-                dismissDirection: DismissDirection.up,
-                width: 350,
-                elevation: 4,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
-            );
-          }
-        },
-        child: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              const double topSpacing = 12;
-              const double midSpacing = 16;
-              const double keyboardHeight = 200;
-              double gridWidth = 350;
-              if (constraints.maxHeight.isFinite) {
-                final double availableForGrid = constraints.maxHeight - topSpacing - midSpacing - keyboardHeight;
-                final double cellSize = (availableForGrid - 56) / 6;
-                final double computedWidth = 5 * cellSize + 32;
-                gridWidth = min(computedWidth, 350);
-              }
-              return Column(
-                children: [
-                  const SizedBox(height: topSpacing),
-                  Flexible(child: Align(alignment: Alignment.topCenter, child: WordsGrid(maxWidth: gridWidth))),
-                  const SizedBox(height: midSpacing),
-                  Center(child: KeyboardByLanguage(maxWidth: gridWidth)),
-                ],
-              );
-            },
+            ),
           ),
         ),
       ),
