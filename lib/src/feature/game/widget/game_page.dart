@@ -210,19 +210,19 @@ class GameBody extends StatelessWidget {
               const double topSpacing = 12;
               const double midSpacing = 16;
               const double keyboardHeight = 200;
-              double gridWidth = 350;
+              double gridWidth = 500;
               if (constraints.maxHeight.isFinite) {
                 final double availableForGrid = constraints.maxHeight - topSpacing - midSpacing - keyboardHeight;
                 final double cellSize = (availableForGrid - 56) / 6;
                 final double computedWidth = 5 * cellSize + 32;
-                gridWidth = min(computedWidth, 350);
+                gridWidth = min(computedWidth, min(500, constraints.maxWidth));
               }
               return Column(
                 children: [
                   const SizedBox(height: topSpacing),
                   Flexible(child: Align(alignment: Alignment.topCenter, child: WordsGrid(maxWidth: gridWidth))),
                   const SizedBox(height: midSpacing),
-                  Center(child: KeyboardByLanguage(maxWidth: gridWidth)),
+                  const Center(child: KeyboardByLanguage()),
                 ],
               );
             },
